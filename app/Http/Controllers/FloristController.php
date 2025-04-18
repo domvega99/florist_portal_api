@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Florist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class FloristController extends Controller
@@ -21,7 +22,6 @@ class FloristController extends Controller
         $status = $request->input('status');
         $city = $request->input('city');
         $floristRep = $request->input('florist_rep');
-
 
         // Search
         if ($request->has('search')) {
@@ -101,5 +101,54 @@ class FloristController extends Controller
         return [
             'message' => 'Florist deleted successfully'
         ];
+    }
+
+    public function getCities()
+    {
+        $cities = Florist::distinct()->pluck('city');
+        foreach ($cities as $key => $city) {
+            $cities[$key] = [
+                'city' => $city ?? ''
+            ];
+        }
+        return response()->json($cities);
+    }
+
+    public function getProvinces()
+    {
+        $provinces = Florist::distinct()->pluck('province');
+        foreach ($provinces as $key => $province) {
+            $provinces[$key] = [
+                'province' => $province ?? ''
+            ];
+        }
+        return response()->json($provinces);
+    }
+
+    public function getStatuses()
+    {
+        $statuses = Florist::distinct()->pluck('status');
+        foreach ($statuses as $key => $status) {
+            $statuses[$key] = [
+                'status' => $status ?? ''
+            ];
+        }
+        return response()->json($statuses);
+    }
+
+    public function getFloristReps()
+    {
+        $florist_reps = Florist::distinct()->pluck('florist_rep');
+        $filtered_reps = [];
+
+        foreach ($florist_reps as $florist_rep) {
+            if (!empty($florist_rep)) {
+                $filtered_reps[] = [
+                    'florist_rep' => $florist_rep
+                ];
+            }
+        }
+
+        return response()->json($filtered_reps);
     }
 }
