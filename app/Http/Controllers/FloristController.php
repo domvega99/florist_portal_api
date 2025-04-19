@@ -108,40 +108,60 @@ class FloristController extends Controller
 
     public function getCities()
     {
-        $cities = Florist::distinct()->pluck('city');
+        $cities = Florist::select('city')
+            ->distinct()
+            ->orderBy('city', 'asc')
+            ->pluck('city');
+
         foreach ($cities as $key => $city) {
             $cities[$key] = [
                 'city' => $city ?? ''
             ];
         }
+        
         return response()->json($cities);
     }
 
+
     public function getProvinces()
     {
-        $provinces = Florist::distinct()->pluck('province');
+        $provinces = Florist::select('province')
+            ->distinct()
+            ->orderBy('province', 'asc')
+            ->pluck('province');
+
         foreach ($provinces as $key => $province) {
             $provinces[$key] = [
                 'province' => $province ?? ''
             ];
         }
+
         return response()->json($provinces);
     }
 
     public function getStatuses()
     {
-        $statuses = Florist::distinct()->pluck('status');
+        $statuses = Florist::select('status')
+            ->distinct()
+            ->orderBy('status', 'asc')
+            ->pluck('status');
+
         foreach ($statuses as $key => $status) {
             $statuses[$key] = [
                 'status' => $status ?? ''
             ];
         }
+
         return response()->json($statuses);
     }
 
     public function getFloristReps()
     {
-        $florist_reps = Florist::distinct()->pluck('florist_rep');
+        $florist_reps = Florist::select('florist_rep')
+            ->distinct()
+            ->orderBy('florist_rep', 'asc')
+            ->pluck('florist_rep');
+
         $filtered_reps = [];
 
         foreach ($florist_reps as $florist_rep) {
