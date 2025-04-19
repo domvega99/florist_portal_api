@@ -118,7 +118,7 @@ class FloristController extends Controller
                 'city' => $city ?? ''
             ];
         }
-        
+
         return response()->json($cities);
     }
 
@@ -147,9 +147,11 @@ class FloristController extends Controller
             ->pluck('status');
 
         foreach ($statuses as $key => $status) {
-            $statuses[$key] = [
-                'status' => $status ?? ''
-            ];
+            if (!empty($status)) {
+                $statuses[$key] = [
+                    'status' => $status
+                ];
+            }
         }
 
         return response()->json($statuses);
