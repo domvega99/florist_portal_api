@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Florist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class FloristController extends Controller
@@ -21,6 +20,7 @@ class FloristController extends Controller
         $perPage = $request->input('per_page', 20);
         $status = $request->input('status');
         $city = $request->input('city');
+        $province = $request->input('province');
         $floristRep = $request->input('florist_rep');
 
         // Search
@@ -42,6 +42,9 @@ class FloristController extends Controller
         }
         if ($request->filled('florist_rep')) {
             $query->where('florist_rep', $floristRep);
+        }
+        if ($request->filled('province')) {
+            $query->where('province', $province);
         }
 
         // Sorting
