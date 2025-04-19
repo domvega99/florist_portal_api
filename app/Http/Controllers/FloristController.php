@@ -118,7 +118,7 @@ class FloristController extends Controller
                 'city' => $city ?? ''
             ];
         }
-
+        
         return response()->json($cities);
     }
 
@@ -141,21 +141,24 @@ class FloristController extends Controller
 
     public function getStatuses()
     {
-        $statuses = Florist::select('status')
+        $rawStatuses = Florist::select('status')
+            ->whereNotNull('status')         
+            ->where('status', '!=', '')      
             ->distinct()
             ->orderBy('status', 'asc')
             ->pluck('status');
 
-        foreach ($statuses as $key => $status) {
-            if (!empty($status)) {
-                $statuses[$key] = [
-                    'status' => $status
-                ];
-            }
+        $statuses = [];
+
+        foreach ($rawStatuses as $status) {
+            $statuses[] = [
+                'status' => $status
+            ];
         }
 
         return response()->json($statuses);
     }
+
 
     public function getFloristReps()
     {
