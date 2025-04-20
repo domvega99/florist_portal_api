@@ -15,17 +15,19 @@ class UserSeeder extends Seeder
     {
         User::create([
             'id' => 1,
-            'name' => 'Administrator Vega',
+            'name' => 'Dominic Vega',
+            'username' => 'dvega',
             'email' => 'administrator@gmail.com',
-            'password' => 'dominic',
+            'password' => 'Da1andonly!',
             'role' => 'Administrator',
         ]);
         User::create([
             'id' => 2,
-            'name' => 'User Vega',
-            'email' => 'user@gmail.com',
-            'password' => 'dominic',
-            'role' => 'User',
+            'name' => 'FSN Admin',
+            'username' => 'fsnadmin',
+            'email' => 'fsnadmin@gmail.com',
+            'password' => 'naks@32npo!NB',
+            'role' => 'Administrator',
         ]);
     }
 }
