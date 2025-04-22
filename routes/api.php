@@ -11,7 +11,7 @@ Route::middleware('api')
         // Authentication routes
         Route::post('/login', [AuthController::class, 'login']);
 
-        Route::middleware(['auth:sanctum'])->group(function () {
+        Route::middleware(['auth:sanctum', 'role:!Florist'])->group(function () {
             // Authentication routes
             Route::post('/logout', [AuthController::class, 'logout']);
             // User routes
