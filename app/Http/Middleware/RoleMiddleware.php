@@ -4,15 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
         $user = $request->user();
 
@@ -20,17 +16,24 @@ public function handle(Request $request, Closure $next, ...$roles)
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
+        // Fetch role name from roles table
+        $roleName = DB::table('roles')->where('id', $user->role)->value('name');
+
+        if (!$roleName) {
+            return response()->json(['message' => 'Role not found'], 403);
+        }
+
         $deniedRoles = array_filter($roles, fn($role) => str_starts_with($role, '!'));
         $allowedRoles = array_filter($roles, fn($role) => !str_starts_with($role, '!'));
 
         foreach ($deniedRoles as $denied) {
-            $role = ltrim($denied, '!');
-            if ($user->role === $role) {
+            $deniedName = ltrim($denied, '!');
+            if ($roleName === $deniedName) {
                 return response()->json(['message' => 'Forbidden. You do not have access.'], 403);
             }
         }
 
-        if (!empty($allowedRoles) && !in_array($user->role, $allowedRoles)) {
+        if (!empty($allowedRoles) && !in_array($roleName, $allowedRoles)) {
             return response()->json(['message' => 'Forbidden. You do not have access.'], 403);
         }
 
