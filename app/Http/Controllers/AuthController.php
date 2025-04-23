@@ -10,26 +10,34 @@ class AuthController extends Controller
 {
     public function login(Request $request) {
         $request->validate([    
-            'email' => 'required|email|exists:users',
+            'username' => 'required|exists:users',
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::with('role_name')->where('username', $request->username)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return [
                 'errors' => [
-                    'email' => ['Credentials Invalid']
+                    'username' => ['Credentials Invalid']
                 ]
             ];
         }
 
-        $token = $user->createToken($user->name);
+        $token = $user->createToken($user->username);
 
         return [
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'role' => $user->role_name->name ?? null,
+                'can_login' => $user->can_login,
+                'locked' => $user->locked,
+                'created_at' => $user->created_at,
+            ],
             'token' => $token->plainTextToken
         ];
+        
     }
 
     public function logout(Request $request) {

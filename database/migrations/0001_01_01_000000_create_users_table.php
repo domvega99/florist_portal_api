@@ -13,24 +13,13 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('username', 50)->unique();
+            $table->integer('role');
             $table->string('password');
-            $table->string('role');
-            $table->rememberToken();
-            $table->timestamps();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+            $table->boolean('can_login')->default(true);
+            $table->boolean('locked')->default(false);
+            $table->timestamp('created_at')->useCurrent();
+        });        
     }
 
     /**
@@ -39,6 +28,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('sessions');
     }
 };

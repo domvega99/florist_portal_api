@@ -10,12 +10,12 @@ Route::middleware('api')
     ->group(function () {
         // Authentication routes
         Route::post('/login', [AuthController::class, 'login']);
-
+        
         Route::middleware(['auth:sanctum', 'role:!Florist'])->group(function () {
             // Authentication routes
             Route::post('/logout', [AuthController::class, 'logout']);
             // User routes
-            Route::apiResource('users', UserController::class)->middleware('role:Administrator');
+            Route::apiResource('users', UserController::class);
             // Florist routes
             Route::apiResource('florists', FloristController::class);
             Route::get('florists-cities', [FloristController::class, 'getCities']);
