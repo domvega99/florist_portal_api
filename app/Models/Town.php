@@ -9,8 +9,10 @@ class Town extends Model
 {
     use HasFactory;
 
+    protected $table = 'towns';
+
     protected $fillable = [
-        'name',
+        'pageid',
     ];
 
     public $timestamps = false;

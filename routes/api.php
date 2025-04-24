@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FloristController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\TownController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,10 @@ Route::middleware('api')
             Route::get('florists-representatives', [FloristController::class, 'getFloristReps']);
             // Page routes
             Route::apiResource('pages', PageController::class);
+            // Town routes
+            Route::apiResource('towns', TownController::class);
+            // Province routes
+            Route::apiResource('provinces', ProvinceController::class);
         });
     }
 );

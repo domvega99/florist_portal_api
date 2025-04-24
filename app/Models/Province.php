@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Province extends Model
 {
     use HasFactory;
 
-    protected $table = 'roles';
+    protected $table = 'province';
 
     protected $fillable = [
-        'name',
+        'pageid',
     ];
 
     public $timestamps = false;

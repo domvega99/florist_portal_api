@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Town;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
-class TownController extends Controller
+class ProvinceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Town::query();
+        $query = Province::query();
         // Inputs
         $search = $request->input('search');
         $sort = $request->input('sort', 'id');
@@ -20,7 +20,7 @@ class TownController extends Controller
 
         // Search
         if ($request->has('search')) {
-            $columns = Schema::getColumnListing((new Town)->getTable());
+            $columns = Schema::getColumnListing((new Province)->getTable());
             $query->where(function ($q) use ($columns, $search) {
                 foreach ($columns as $column) {
                     $q->orWhere($column, 'like', '%' . $search . '%');
@@ -51,33 +51,33 @@ class TownController extends Controller
             'pageid' => 'required',
         ]);
 
-        $town = Town::create($request);
+        $province = Province::create($request);
 
-        return $town;
+        return $province;
     }
 
-    public function show(Town $town)
+    public function show(Province $province)
     {
-        return $town;
+        return $province;
     }
 
-    public function update(Request $request, Town $town)
+    public function update(Request $request, Province $province)
     {
         $request = $request->validate([
             'pageid' => 'required',
         ]);
 
-        $town->update($request);
+        $province->update($request);
 
-        return $town;
+        return $province;
     }
 
-    public function destroy(Town $town)
+    public function destroy(Province $province)
     {
-        $town->delete();
+        $province->delete();
 
         return [
-            'message' => 'Town deleted successfully'
+            'message' => 'Province deleted successfully'
         ];
     }
 }
