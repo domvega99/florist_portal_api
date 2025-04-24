@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FloristController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,8 @@ Route::middleware('api')
             Route::get('florists-provinces', [FloristController::class, 'getProvinces']);
             Route::get('florists-statuses', [FloristController::class, 'getStatuses']);
             Route::get('florists-representatives', [FloristController::class, 'getFloristReps']);
+            // Page routes
+            Route::apiResource('pages', PageController::class);
         });
     }
 );
