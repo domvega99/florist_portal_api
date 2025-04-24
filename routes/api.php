@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\FloristController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProvinceController;
@@ -13,14 +14,15 @@ Route::middleware('api')
     ->group(function () {
         // Authentication routes
         Route::post('/login', [AuthController::class, 'login']);
-        
+        Route::apiResource('florists', FloristController::class);
         Route::middleware(['auth:sanctum', 'role:!Florist'])->group(function () {
             // Authentication routes
             Route::post('/logout', [AuthController::class, 'logout']);
             // User routes
             Route::apiResource('users', UserController::class);
+            
             // Florist routes
-            Route::apiResource('florists', FloristController::class);
+            
             Route::get('florists-cities', [FloristController::class, 'getCities']);
             Route::get('florists-provinces', [FloristController::class, 'getProvinces']);
             Route::get('florists-statuses', [FloristController::class, 'getStatuses']);
@@ -31,6 +33,8 @@ Route::middleware('api')
             Route::apiResource('towns', TownController::class);
             // Province routes
             Route::apiResource('provinces', ProvinceController::class);
+            // Collection routes
+            Route::apiResource('collections', CollectionController::class);
         });
     }
 );

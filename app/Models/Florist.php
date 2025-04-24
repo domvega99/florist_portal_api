@@ -12,13 +12,25 @@ class Florist extends Model
     protected $table = 'florists';
 
     protected $fillable = [
-        'florist_name',
-        'contact_number',
+        'floristcode',
+        'status',
+        'floristname',
+        'contactnumber',
         'address',
         'city',
         'postcode',
-        'delivery_fee',
-        'sell_extras',
+        'province',
+        'website',
+        'socialmedia',
+        'shopifygid',
+        'floristinfo',
+        'floristrep',
+        'photo',
+        'photo_url',
+        'collection',
+        'imported',
+        'infoid',
+        'userid',
     ];
 
     public $timestamps = false;

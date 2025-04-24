@@ -13,21 +13,21 @@ return new class extends Migration
     {
         Schema::create('floristsinfo', function (Blueprint $table) {
             $table->id();
-            $table->text('call_outcome')->nullable();
-            $table->string('product_type', 255)->nullable();
-            $table->string('product_price', 50)->nullable();
-            $table->string('delivery_fee', 50)->nullable();
-            $table->enum('sell_extras', ['Yes', 'No'])->nullable();
-            $table->string('popularity_trend')->nullable();
-            $table->enum('preferred_communication', ['Facebook', 'Email', 'Phone', 'Other'])->nullable();
-            $table->text('member_of_other_networks')->nullable();
-            $table->text('flower_supplier')->nullable();
-            $table->enum('interested_in_free_website', ['Yes', 'No', 'Maybe'])->nullable();
-            $table->string('discount_offer', 255)->nullable();
-            $table->text('additional_info')->nullable();
-            $table->text('description')->nullable();
-            $table->text('meta_description')->nullable();
-            $table->string('page_title', 255)->nullable();
+            $table->text('call_outcome');
+            $table->string('product_type', 255);
+            $table->string('product_price', 50);
+            $table->string('delivery_fee', 50);
+            $table->string('sell_extras', 10);
+            $table->text('popularity_trend');
+            $table->string('preferred_communication', 255);
+            $table->text('member_of_other_networks');
+            $table->text('flower_supplier');
+            $table->string('interested_in_free_website', 255);
+            $table->string('discount_offer', 255);
+            $table->text('additional_info');
+            $table->text('description');
+            $table->text('meta_description');
+            $table->string('page_title', 255);
         });        
     }
 
