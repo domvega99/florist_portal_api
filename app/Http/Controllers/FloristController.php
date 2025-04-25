@@ -58,10 +58,10 @@ class FloristController extends Controller
         // Select fields
         $query->select([
             'florists.*',
-            'towns.name as city',
-            'province.name as province',
-            'status.statusname as status',
-            'users.username as floristrep',
+            'towns.name as city_name',
+            'province.name as province_name',
+            'status.statusname as status_name',
+            'users.username as floristrep_name',
         ]);
         // Pagination
         $tasks = $query->paginate($perPage, ['*'], 'page', $page + 1);
