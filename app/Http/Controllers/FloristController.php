@@ -39,16 +39,16 @@ class FloristController extends Controller
 
         // Filters
         if ($request->filled('status')) {
-            $query->where('status.statusname', 'like', '%' . $status . '%');  
+            $query->where('status', $status);
         }
         if ($request->filled('city')) {
-            $query->where('towns.name', 'like', '%' . $city . '%');  
+            $query->where('city', $city);
         }
         if ($request->filled('floristrep')) {
-            $query->where('users.username', 'like', '%' . $floristRep . '%');  
+            $query->where('floristrep', $floristRep);
         }
         if ($request->filled('province')) {  
-            $query->where('province.name', 'like', '%' . $province . '%');  
+            $query->where('province', $province);
         }
         // Sorting
         if (!in_array(strtolower($order), ['asc', 'desc'])) {
