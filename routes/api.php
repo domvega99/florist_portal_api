@@ -14,7 +14,9 @@ Route::middleware('api')
     ->group(function () {
         // Authentication routes
         Route::post('/login', [AuthController::class, 'login']);
+        // Florist routes
         Route::apiResource('florists', FloristController::class);
+        
         Route::middleware(['auth:sanctum', 'role:!Florist'])->group(function () {
             // Authentication routes
             Route::post('/logout', [AuthController::class, 'logout']);
@@ -22,11 +24,7 @@ Route::middleware('api')
             Route::apiResource('users', UserController::class);
             
             // Florist routes
-            
-            Route::get('florists-cities', [FloristController::class, 'getCities']);
-            Route::get('florists-provinces', [FloristController::class, 'getProvinces']);
-            Route::get('florists-statuses', [FloristController::class, 'getStatuses']);
-            Route::get('florists-representatives', [FloristController::class, 'getFloristReps']);
+            Route::apiResource('florists', FloristController::class);
             // Page routes
             Route::apiResource('pages', PageController::class);
             // Town routes

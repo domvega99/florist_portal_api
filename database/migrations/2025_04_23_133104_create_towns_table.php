@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('towns', function (Blueprint $table) {
             $table->id();
             $table->integer('pageid');
+            $table->string('name');
         });        
     }
 

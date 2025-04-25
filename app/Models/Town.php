@@ -13,6 +13,7 @@ class Town extends Model
 
     protected $fillable = [
         'pageid',
+        'name'
     ];
 
     public $timestamps = false;

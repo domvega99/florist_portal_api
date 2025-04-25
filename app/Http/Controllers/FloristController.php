@@ -23,41 +23,48 @@ class FloristController extends Controller
         $status = $request->input('status');
         $city = $request->input('city');
         $province = $request->input('province');
-        $floristRep = $request->input('florist_rep');
-
+        $floristRep = $request->input('floristrep');
+        // Joins
+        $query->leftJoin('status', 'status.id', '=', 'florists.status')
+            ->leftJoin('towns', 'towns.id', '=', 'florists.city')
+            ->leftJoin('users', 'users.id', '=', 'florists.floristrep')
+            ->leftJoin('province', 'province.id', '=', 'florists.province');
         // Search
-        if ($request->has('search')) {
-            $columns = Schema::getColumnListing((new Florist)->getTable());
-            $query->where(function ($q) use ($columns, $search) {
-                foreach ($columns as $column) {
-                    $q->orWhere($column, 'like', '%' . $search . '%');
-                }
-            });
-        }
+        $columns = Schema::getColumnListing((new Florist)->getTable());
+        $query->where(function ($q) use ($columns, $search) {
+            foreach ($columns as $column) {
+                $q->orWhere("florists.$column", 'like', '%' . $search . '%');
+            }
+        });
 
         // Filters
         if ($request->filled('status')) {
-            $query->where('status', $status);
+            $query->where('status.statusname', 'like', '%' . $status . '%');  
         }
         if ($request->filled('city')) {
-            $query->where('city', $city);
+            $query->where('towns.name', 'like', '%' . $city . '%');  
         }
-        if ($request->filled('florist_rep')) {
-            $query->where('florist_rep', $floristRep);
+        if ($request->filled('floristrep')) {
+            $query->where('users.username', 'like', '%' . $floristRep . '%');  
         }
-        if ($request->filled('province')) {
-            $query->where('province', $province);
+        if ($request->filled('province')) {  
+            $query->where('province.name', 'like', '%' . $province . '%');  
         }
-
         // Sorting
         if (!in_array(strtolower($order), ['asc', 'desc'])) {
             $order = 'asc';
         }
         $query->orderBy($sort, $order);
-
+        // Select fields
+        $query->select([
+            'florists.*',
+            'towns.name as city',
+            'province.name as province',
+            'status.statusname as status',
+            'users.username as floristrep',
+        ]);
         // Pagination
         $tasks = $query->paginate($perPage, ['*'], 'page', $page + 1);
-
         // Response
         return response()->json([
             'per_page' => $tasks->perPage(),
@@ -176,79 +183,5 @@ class FloristController extends Controller
         return [
             'message' => 'Florist deleted successfully'
         ];
-    }
-
-    public function getCities()
-    {
-        $cities = Florist::select('city')
-            ->distinct()
-            ->orderBy('city', 'asc')
-            ->pluck('city');
-
-        foreach ($cities as $key => $city) {
-            $cities[$key] = [
-                'city' => $city ?? ''
-            ];
-        }
-        
-        return response()->json($cities);
-    }
-
-
-    public function getProvinces()
-    {
-        $provinces = Florist::select('province')
-            ->distinct()
-            ->orderBy('province', 'asc')
-            ->pluck('province');
-
-        foreach ($provinces as $key => $province) {
-            $provinces[$key] = [
-                'province' => $province ?? ''
-            ];
-        }
-
-        return response()->json($provinces);
-    }
-
-    public function getStatuses()
-    {
-        $rawStatuses = Florist::select('status')
-            ->whereNotNull('status')         
-            ->where('status', '!=', '')      
-            ->distinct()
-            ->orderBy('status', 'asc')
-            ->pluck('status');
-
-        $statuses = [];
-
-        foreach ($rawStatuses as $status) {
-            $statuses[] = [
-                'status' => $status
-            ];
-        }
-
-        return response()->json($statuses);
-    }
-
-
-    public function getFloristReps()
-    {
-        $florist_reps = Florist::select('florist_rep')
-            ->distinct()
-            ->orderBy('florist_rep', 'asc')
-            ->pluck('florist_rep');
-
-        $filtered_reps = [];
-
-        foreach ($florist_reps as $florist_rep) {
-            if (!empty($florist_rep)) {
-                $filtered_reps[] = [
-                    'florist_rep' => $florist_rep
-                ];
-            }
-        }
-
-        return response()->json($filtered_reps);
     }
 }
