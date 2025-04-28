@@ -81,42 +81,37 @@ class FloristController extends Controller
             'contactnumber' => 'required',
             'address' => 'required',
             'city' => 'required',
+            'province' => 'required',
             'postcode' => 'required',
             'call_outcome' => 'required',
-            'social_media' => 'required',
-            'product_type' => 'required',
-            'product_price' => 'required|numeric',
-            'delivery_fee' => 'required|numeric',
-            'sell_extras' => 'required',
-            'popularity_trend' => 'nullable|string|max:255',
-            'preferred_communication' => 'nullable|string|max:255',
-            'website' => 'required',
-            'province' => 'required',
-            'member_of_other_networks' => 'nullable',
-            'flower_supplier' => 'nullable|string|max:255',
-            'interested_in_free_website' => 'nullable',
-            'florist_rep' => 'required',
-            'additional_info' => 'nullable|string|max:1000',
-            'floristcode' => 'required',
-            'shopify_gid' => 'required',
-            'florist_info' => 'required',
-            'collection' => 'required',
-            'imported' => 'required',
-            'info_id' => 'required',
-            'user' => 'required',
-            'discount_offer' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:1000',
-            'meta_description' => 'nullable|string|max:1000',
-            'page_title' => 'nullable|string|max:255',
+            'floristrep' => 'required',
+            'website' => 'nullable|string',  
+            'socialmedia' => 'nullable|string',
+            'collection' => 'nullable|string',
+            'product_type' => 'nullable|string',
+            'product_price' => 'nullable|string',
+            'delivery_fee' => 'nullable|string',
+            'sell_extras' => 'nullable|string',
+            'popularity_trend' => 'nullable|string',
+            'preferred_communication' => 'nullable|string',
+            'member_of_other_networks' => 'nullable|string',
+            'flower_supplier' => 'nullable|string',
+            'interested_free_website' => 'nullable|string',
+            'discout_offer' => 'nullable|string',
+            'additional_info' => 'nullable|string',
+            'page_title' => 'nullable|string',
+            'meta_description' => 'nullable|string',
+            'description' => 'nullable|string',
         ]);
 
-        // Start database transaction
         DB::beginTransaction();
 
         try {
-            // Create the FloristInfo record
             $floristInfo = FloristInfo::create([
                 'call_outcome' => $validated['call_outcome'],
+                'website' => $validated['website'],
+                'socialmedia' => $validated['socialmedia'],
+                'collection' => $validated['collection'],
                 'product_type' => $validated['product_type'],
                 'product_price' => $validated['product_price'],
                 'delivery_fee' => $validated['delivery_fee'],
@@ -125,30 +120,34 @@ class FloristController extends Controller
                 'preferred_communication' => $validated['preferred_communication'],
                 'member_of_other_networks' => $validated['member_of_other_networks'],
                 'flower_supplier' => $validated['flower_supplier'],
-                'interested_in_free_website' => $validated['interested_in_free_website'],
-                'discount_offer' => $validated['discount_offer'],
+                'interested_free_website' => $validated['interested_free_website'],
+                'discout_offer' => $validated['discout_offer'],
                 'additional_info' => $validated['additional_info'],
-                'description' => $validated['description'],
-                'meta_description' => $validated['meta_description'],
                 'page_title' => $validated['page_title'],
+                'meta_description' => $validated['meta_description'],
+                'description' => $validated['description'],
             ]);
 
             $florist = Florist::create([
-                'floristcode' => $validated['floristcode'],
-                'status' => $validated['status'],
                 'floristname' => $validated['floristname'],
                 'contactnumber' => $validated['contactnumber'],
                 'address' => $validated['address'],
                 'city' => $validated['city'],
-                'infoid' => $floristInfo->id, 
+                'province' => $validated['province'],
+                'postcode' => $validated['postcode'],
+                'floristrep' => $validated['floristrep'],
+                'status' => $validated['status'],
+                'infoid' => $floristInfo->id,  
             ]);
 
-            // Commit the transaction
             DB::commit();
-
-            // Return the created florist
-            return response()->json($florist, 201);
+            return response()->json([
+                'message' => 'Florist successfully added.',
+                'florist' => $florist,
+                'info' => $floristInfo
+            ], 201);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'error' => 'An error occurred while creating the florist.',
                 'message' => $e->getMessage(),
@@ -156,6 +155,7 @@ class FloristController extends Controller
             ], 500);
         }
     }
+
 
     public function show(Florist $florist)
     {
